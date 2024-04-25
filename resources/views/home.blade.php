@@ -1,67 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resep Makanan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f8f8;
-        }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        p {
-            line-height: 1.6;
-        }
-        .recipe {
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>To Do List</title>
+  @vite('resources/css/app.css')
 </head>
+
 <body>
-    <header>
-        <h1>Resep Makanan</h1>
-    </header>
-    <div class="container">
-        <div class="recipe">
-            <h2>Ayam Goreng</h2>
-            <p>Resep ayam goreng sederhana:</p>
-            <ol>
-                <li>Persiapkan ayam, garam, merica, bawang putih, dan bumbu lain sesuai selera.</li>
-                <li>Cuci ayam dan lumuri dengan garam, merica, dan bumbu lainnya.</li>
-                <li>Goreng ayam dalam minyak panas hingga kecoklatan dan matang sempurna.</li>
-                <li>Sajikan ayam goreng hangat dengan nasi dan sambal.</li>
-            </ol>
-        </div>
-        <div class="recipe">
-            <h2>Nasi Goreng</h2>
-            <p>Resep nasi goreng yang lezat:</p>
-            <ol>
-                <li>Persiapkan nasi, telur, bawang merah, bawang putih, kecap, dan bumbu lain sesuai selera.</li>
-                <li>Tumis bawang merah dan bawang putih hingga harum.</li>
-                <li>Masukkan telur dan aduk hingga matang.</li>
-                <li>Tambahkan nasi, kecap, dan bumbu lainnya. Aduk hingga semua bahan tercampur rata.</li>
-                <li>Sajikan nasi goreng panas dengan irisan mentimun dan kerupuk.</li>
-            </ol>
-        </div>
+  @extends('layouts.layout')
+
+
+@section('contect')
+
+{{-- content --}}
+<div class="flex justify-center mt-10 flex-col gap-10">
+  {{-- search bar --}}
+  <form name="tasks" action="/" method="post">
+    @csrf
+  <label class="form-control w-full max-w-lg mx-auto">
+    <div class="label">
+      <span class="label-text text-emerald-600">Task Baru</span>
     </div>
-</body>
+    <input name="task" type="text" placeholder="Type here" class="input input-bordered input-success w-full max-w-lg" />
+    <div class="label">
+      @error('task')
+          <p class="text-red-500">{{$message}}</p>
+      @enderror
+    </div>
+    {{-- button add --}}
+    <button type="submit" class="btn btn-success w-36 self-center">Add</button>
+    
+    {{-- akhir button add --}}
+  </label>
+  {{-- akhir search bar --}}
+</form>
+  {{-- task --}}
+  <div class="flex flex-col gap-3">
+    @foreach ($tasks as $task)
+    {{-- task 1 --}}
+    <div role="alert" class="alert max-w-4xl mx-auto">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <div class="flex flex-col">
+        <span class="text-sm text-slate-400">{{ $task->tanggal}}</span>
+        <span class="text-xl font-bold">{{ $task['task'] }}</span>
+      </div>
+      <div>
+        <div class="tooltip" data-tip="Detail">
+          <button class="btn btn-sm shadow-lg bg-base-200 border">View</button>
+        </div>
+        <div class="tooltip" data-tip="Edit">
+          <button class="btn btn-sm shadow-lg bg-yellow-500">Edit</button>
+        </div>
+        <form action="/deleteTask/{{ $task->task_id }}" method="POST" class="display-inline border-0">
+          @method('DELETE')
+          @csrf
+          <button class="btn btn-sm btn-success" class="display-inline" onclick="my_modal_2.showModal()">Done</button>
+        </form>
+      
+      </div>
+    </div>
+    {{-- akhir task 1 --}}
+    @endforeach
+  </div>
+  {{-- akhir task --}}
+
+</div>
+{{-- akhir content --}}
+@endsection
+
+</div>
 </html>
